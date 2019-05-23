@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang = "en-us">
+    <head>
+        <title>Index</title>
+    </head>
+
+    <body>
+         <div>
+             <h1>Todo Tracker</h1>
+        </div>
+
+         <!--Input form--> 
+          <div>
+            <form id = 'form' autocomplete = 'off'>
+
+             <input id = "input" type = "text" value ="" placeholder = "New Todo">
+             <button>Submit</button>
+            </form>
+
+            </div>
+
+            <!-- Display Items-->
+            <div>
+               <h5>Todos Items Below....</h5>
+
+              <ul></ul>
+
+            </div>
+            <hr>
+
+            <!--Clear all-->
+
+            <div>
+             <button id = 'button'>Clear all</button>
+
+            </div>
+    </body>
+
+    <script>
+
+        //pink background color
+        document.body.style.backgroundColor = 'pink';
+
+        
+        var form = document.getElementById('form');
+        var ul = document.querySelector('ul');
+        var button = document.getElementById('button');
+        var input = document.getElementById('input');
+
+        /*Local storage array*/
+        var todosArray = [];
+        
+        //add event Listener to form
+        form.addEventListener('submit', (e)=>{
+             e.preventDefault();
+
+             //extract value from input field
+            let userInput = input.value;
+
+            //locale storage
+            storageLength = JSON.parse(localStorage.getItem('todos'));
+
+                if(!storageLength)
+                {
+                    //local storage empty. Add new item
+                    todosArray.push(userInput);
+                    localStorage.setItem('todos', JSON.stringify(todosArray));
+                }
+                else
+                {
+                    //extract items from local storage
+                    var items = JSON.parse(localStorage.getItem('todos'));
+
+                    //add new item to array
+                    items.push(userInput);
+
+                    //add item to local storage
+                    localStorage.setItem('todos', JSON.stringify(items));
+                }
+
+            //build DOM nodes
+            let li = document.createElement('li');
+            let item = document.createTextNode(userInput);
+            li.appendChild(item);
+            ul.appendChild(li);
+
+             //reset value of input field
+            input.value = '';
+        });
+
+
+        //add event Listener to Clear button
+        button.addEventListener('click', () =>{
+             
+            //remove items from the list
+            while(ul.hasChildNodes())
+            {
+                ul.removeChild(ul.firstChild);
+            }
+            
+            //clear local storage
+            localStorage.removeItem('todos');
+        });
+        
+    </script>
+
+</html>
